@@ -5,7 +5,7 @@ export default function Home() {
     <>
       <main className="flex min-h-screen flex-col items-center p-8 sm:p-24 bg-gray-100">
         <h1 className="text-4xl font-bold text-center mb-16 text-gray-800">
-          サウナ飯レビューへようこそ
+          サ飯レビューへようこそ
         </h1>
         <div className="flex flex-col sm:flex-row sm:justify-center gap-6 mt-16 sm:mt-32 w-full max-w-xl">
           <Link
