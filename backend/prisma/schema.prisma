@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -13,16 +9,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//設計したデータベース
 model User {
-  id              String          @id @default(cuid()) // String型に変更、cuidでユニークID生成
-  name            String
-  email           String          @unique
-  passwordHash    String
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  saunaFacilities SaunaFacility[]
-  reviews         Review[]
+  id              String          @id @default(cuid()) // ユーザーのユニークID
+  name            String           // ユーザーの名前
+  email           String           @unique             // ユーザーのメールアドレス（ユニーク）
+  passwordHash    String           // パスワードのハッシュ
+  createdAt       DateTime        @default(now())     // 作成日時
+  updatedAt       DateTime        @updatedAt          // 更新日時
+  saunaFacilities SaunaFacility[]  // ユーザーが作成したサウナ施設
+  reviews         Review[]         // ユーザーが投稿したレビュー
 }
 
 model SaunaFacility {
