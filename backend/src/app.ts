@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { config } from "dotenv";
+import authRoutes from "./routes/auth";
 
 config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 //ルート
 app.get("/", (req, res) => {
   res.json({ message: "API" });
+  app.use("/api/auth", authRoutes);
 });
 
 //エラーハンドリング
