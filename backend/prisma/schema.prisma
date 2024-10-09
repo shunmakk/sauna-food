@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//設計したデータベース
+model User {
+  id            Int             @id @default(autoincrement())
+  name          String
+  email         String          @unique
+  passwordHash  String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  reviews       Review[]
+  saunaFacilities SaunaFacility[] // 追加: User から SaunaFacility への関係
+}
+
+model SaunaFacility {
+  id          Int         @id @default(autoincrement())
+  name        String
+  address     String
+  description String?
+  createdBy   User        @relation(fields: [createdById], references: [id])
+  createdById Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  saunaMeals  SaunaMeal[]
+}
+
+model SaunaMeal {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String?
+  price       Int
+  facility    SaunaFacility @relation(fields: [facilityId], references: [id])
+  facilityId  Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  reviews     Review[]
+}
+
+model Review {
+  id            Int       @id @default(autoincrement())
+  overallRating Int
+  tasteRating   Int
+  valueRating   Int
+  comment       String?
+  imageUrl      String?
+  user          User      @relation(fields: [userId], references: [id])
+  userId        Int
+  saunaMeal     SaunaMeal @relation(fields: [saunaMealId], references: [id])
+  saunaMealId   Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  tags          Tag[]
+}
+
+model Tag {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  reviews Review[]
+}
