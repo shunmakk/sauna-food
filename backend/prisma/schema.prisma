@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -13,60 +9,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//設計したデータベース
 model User {
-  id            Int             @id @default(autoincrement())
-  name          String
-  email         String          @unique
-  passwordHash  String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  reviews       Review[]
-  saunaFacilities SaunaFacility[] // 追加: User から SaunaFacility への関係
+  id              String          @id @default(cuid()) // ユーザーのユニークID
+  name            String           // ユーザーの名前
+  email           String           @unique             // ユーザーのメールアドレス（ユニーク）
+  passwordHash    String           // パスワードのハッシュ
+  createdAt       DateTime        @default(now())     // 作成日時
+  updatedAt       DateTime        @updatedAt          // 更新日時
+  saunaFacilities SaunaFacility[]  // ユーザーが作成したサウナ施設
+  reviews         Review[]         // ユーザーが投稿したレビュー
 }
 
 model SaunaFacility {
-  id          Int         @id @default(autoincrement())
+  id          String         @id @default(cuid()) // String型に変更、cuidでユニークID生成
   name        String
   address     String
   description String?
   createdBy   User        @relation(fields: [createdById], references: [id])
-  createdById Int
+  createdById String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   saunaMeals  SaunaMeal[]
 }
 
 model SaunaMeal {
-  id          Int           @id @default(autoincrement())
+  id          String         @id @default(cuid()) // String型に変更、cuidでユニークID生成
   name        String
   description String?
   price       Int
   facility    SaunaFacility @relation(fields: [facilityId], references: [id])
-  facilityId  Int
+  facilityId  String        // facilityIdもString型に変更
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   reviews     Review[]
 }
 
 model Review {
-  id            Int       @id @default(autoincrement())
+  id            String         @id @default(cuid()) // String型に変更、cuidでユニークID生成
   overallRating Int
   tasteRating   Int
   valueRating   Int
   comment       String?
   imageUrl      String?
   user          User      @relation(fields: [userId], references: [id])
-  userId        Int
+  userId        String
   saunaMeal     SaunaMeal @relation(fields: [saunaMealId], references: [id])
-  saunaMealId   Int
+  saunaMealId   String      // saunaMealIdもString型に変更
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   tags          Tag[]
 }
 
 model Tag {
-  id      Int      @id @default(autoincrement())
+  id      String   @id @default(cuid()) // String型に変更、cuidでユニークID生成
   name    String   @unique
   reviews Review[]
 }

@@ -3,23 +3,31 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { config } from "dotenv";
+import authRoutes from "./routes/auth";
 
 config();
 
 const app = express();
 
 //ミドルウェア
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // フロントエンドのURL
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 
-//ルート
 app.get("/", (req, res) => {
   res.json({ message: "API" });
 });
 
-//エラーハンドリング
+//ユーザー認証ルートを追加
+app.use("/api/auth", authRoutes);
+
+// エラーハンドリング
 app.use(
   (
     err: Error,
