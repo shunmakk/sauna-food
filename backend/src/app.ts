@@ -10,18 +10,24 @@ config();
 const app = express();
 
 //ミドルウェア
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // フロントエンドのURL
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 
-//ルート
 app.get("/", (req, res) => {
   res.json({ message: "API" });
-  app.use("/api/auth", authRoutes);
 });
 
-//エラーハンドリング
+//ユーザー認証ルートを追加
+app.use("/api/auth", authRoutes);
+
+// エラーハンドリング
 app.use(
   (
     err: Error,

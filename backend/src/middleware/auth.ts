@@ -17,6 +17,7 @@ export const authMiddleware = async (
     req.user = decodedToken; // このuserはtypes/express/index.d.ts内で型定義
     next();
   } catch (error) {
+    console.error("Token verification error:", error);
     res.status(401).json({ error: "無効なトークンです" });
   }
 };
