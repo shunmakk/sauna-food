@@ -1,9 +1,7 @@
-import { Request } from "express";
+import { DecodedIdToken } from "firebase-admin/auth";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: any;
-    }
+declare module "express-serve-static-core" {
+  interface Request {
+    user?: DecodedIdToken;
   }
 }

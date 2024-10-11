@@ -10,12 +10,12 @@ datasource db {
 }
 
 model User {
-  id              String          @id @default(cuid()) // ユーザーのユニークID
-  name            String           // ユーザーの名前
-  email           String           @unique             // ユーザーのメールアドレス（ユニーク）
-  passwordHash    String           // パスワードのハッシュ
-  createdAt       DateTime        @default(now())     // 作成日時
-  updatedAt       DateTime        @updatedAt          // 更新日時
+  id              String          @id @unique      // FirebaseのユーザーID（ユニーク）
+  name            String
+  email           String           @unique         // ユーザーのメールアドレス（ユニーク）
+  passwordHash    String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   saunaFacilities SaunaFacility[]  // ユーザーが作成したサウナ施設
   reviews         Review[]         // ユーザーが投稿したレビュー
 }

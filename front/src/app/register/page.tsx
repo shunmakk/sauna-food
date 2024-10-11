@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -20,19 +19,6 @@ export default function Register() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      // メールアドレスの存在をサーバー側でチェック
-      const emailCheckResponse = await axios.post(
-        "http://localhost:5000/api/auth/check-email", //将来的にはenvファイルに追加
-        { email: data.email }
-      );
-
-      // 409エラーが返ってきた場合
-      if (emailCheckResponse.status === 200 && emailCheckResponse.data.exists) {
-        setError("このメールアドレスは既に存在します。");
-        window.alert("このメールアドレスは既に存在します");
-        return;
-      }
-
       // Firebase Authでのユーザー作成
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -40,12 +26,12 @@ export default function Register() {
         data.password
       );
 
-      // IDトークンの取得
+      // FirebaseからIDトークンを取得
       const idToken = await userCredential.user.getIdToken();
 
-      // ユーザー情報をserver側で保存
+      // バックエンドにユーザー情報とIDトークンを送信してユーザーを作成
       await axios.post(
-        "http://localhost:5000/api/auth/register", //将来的にはenvファイルに追加
+        "http://localhost:5000/api/auth/register",
         {
           name: data.name,
           email: data.email,
@@ -86,6 +72,7 @@ export default function Register() {
           type="password"
           placeholder="パスワードを入力してください"
           required
+          minLength={6}
         />
         <div>
           <button type="submit">登録する</button>

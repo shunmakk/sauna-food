@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { config } from "dotenv";
 import authRoutes from "./routes/auth";
+import saunaFacilityRoutes from "./routes/Facilities";
 
 config();
 
@@ -26,6 +27,8 @@ app.get("/", (req, res) => {
 
 //ユーザー認証ルートを追加
 app.use("/api/auth", authRoutes);
+//サウナ施設ルート
+app.use("/api/sauna-facilities", saunaFacilityRoutes);
 
 // エラーハンドリング
 app.use(
