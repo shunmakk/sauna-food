@@ -1,15 +1,20 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "../middleware/auth";
-import { error } from "console";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 //登録
-router.post("/", authMiddleware, async (req: Request, res: Response) => {
+router.post("/", authMiddleware, async (req: any, res: any) => {
   const { name, address, description } = req.body;
   const createdById = req.user?.uid;
+
+  if (!createdById) {
+    return res
+      .status(401)
+      .json({ error: "認証に失敗しました(ユーザーがいない可能性あり)" });
+  }
 
   try {
     const makeSaunaFaciltiy = await prisma.saunaFacility.create({
@@ -24,6 +29,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
     });
     res.status(201).json(makeSaunaFaciltiy);
   } catch (e) {
+    console.error(e); // エラーの詳細をログに出力
     res.status(400).json({ error: "サウナ施設のデータ作成失敗" });
   }
 });
@@ -86,7 +92,7 @@ router.put("/:id", authMiddleware, async (req: any, res: any) => {
 });
 
 //削除
-router.delete("/id", authMiddleware, async (res: any, req: any) => {
+router.delete("/id", authMiddleware, async (req: any, res: any) => {
   const { id } = req.params;
   const userId = req.user?.uid;
 
@@ -98,7 +104,7 @@ router.delete("/id", authMiddleware, async (res: any, req: any) => {
       return res.status(403).json({ error: "削除権限エラー" });
     }
 
-    await prisma.saunaFacility.deleteMany({ where: { id } });
+    await prisma.saunaFacility.delete({ where: { id } });
     res.status(204).send();
   } catch (e) {
     res.status(400).json({ error: "削除に失敗！" });
