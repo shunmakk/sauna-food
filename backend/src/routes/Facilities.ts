@@ -92,7 +92,7 @@ router.put("/:id", authMiddleware, async (req: any, res: any) => {
 });
 
 //削除
-router.delete("/id", authMiddleware, async (req: any, res: any) => {
+router.delete("/:id", authMiddleware, async (req: any, res: any) => {
   const { id } = req.params;
   const userId = req.user?.uid;
 
