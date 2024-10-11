@@ -1,60 +1,59 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from ".prisma/client";
-import admin from "../config/firebaseAdmin";
+import admin from "../config/firebaseAdmin"; // Firebase Admin SDK
+import { authMiddleware } from "../middleware/auth";
 
-//認証ルート
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// ユーザー登録エンドポイント
-router.post("/register", async (req: any, res: any) => {
-  const { email, name } = req.body;
+// ユーザー登録エンドポイント（IDトークンを使ったユーザー作成）
+router.post(
+  "/register",
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const { email, name } = req.body;
+    const { uid } = res.locals; // verifyTokenミドルウェアでuidを取得
 
-  try {
-    // Prismaでユーザー情報をデータベースに保存
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        passwordHash: "", // パスワードハッシュは不要
-      },
-    });
+    try {
+      // Prismaでユーザーをデータベースに保存
+      const user = await prisma.user.create({
+        data: {
+          id: uid, // FirebaseのUIDを使う
+          email,
+          name,
+          passwordHash: "", // フロントで管理しているため不要
+        },
+      });
 
-    return res.status(201).json({ message: "ユーザーが作成されました", user });
-  } catch (error) {
-    console.error("ユーザーの作成に失敗:", error);
-    return res.status(500).json({ error: "サーバーエラー" });
-  }
-});
-
-// メールアドレスの存在チェックエンドポイント
-router.post("/check-email", async (req: any, res: any) => {
-  const { email } = req.body;
-
-  try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (user) {
-      return res.status(200).json({ exists: true });
+      res.status(201).json({ message: "ユーザーが作成されました", user });
+    } catch (error) {
+      console.error("ユーザーの作成に失敗:", error);
+      res.status(500).json({ error: "サーバーエラー" });
     }
-    return res.status(200).json({ exists: false });
-  } catch (error) {
-    console.error("メールアドレスのチェックに失敗:", error);
-    return res.status(500).json({ error: "サーバーエラー" });
   }
-});
+);
 
-//ログインユーザーを登録するエンドポイント
-router.post("/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+// ミドルウェア：トークンを検証し、Firebase UIDを取得
+export const verifyToken = async (
+  req: Request,
+  res: Response,
+  next: Function
+) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(403).json({ error: "トークンがありません" });
+  }
 
   try {
-    const userRecord = await admin.auth().getUserByEmail(email);
-    const customToken = await admin.auth().createCustomToken(userRecord.uid);
-
-    res.json({ token: customToken });
+    // Firebase Admin SDKでトークンを検証し、ユーザー情報を取得
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    res.locals.uid = decodedToken.uid; // UIDを次の処理に渡す
+    next();
   } catch (error) {
-    res.status(400).json({ error: "無効な認証" });
+    console.error("トークンの検証に失敗:", error);
+    res.status(403).json({ error: "無効なトークンです" });
   }
-});
+};
 
 export default router;

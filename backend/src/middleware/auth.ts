@@ -1,3 +1,4 @@
+/// <reference path="../types/express/index.d.ts" />
 import { Request, Response, NextFunction } from "express";
 import admin from "../config/firebaseAdmin";
 import { DecodedIdToken } from "firebase-admin/auth";
@@ -20,6 +21,7 @@ export const authMiddleware = async (
       .auth()
       .verifyIdToken(token);
     req.user = decodedToken;
+    res.locals.uid = decodedToken.uid;
     next(); // next()を呼び出して次のミドルウェアへ
   } catch (error) {
     console.error("Token verification error:", error);
