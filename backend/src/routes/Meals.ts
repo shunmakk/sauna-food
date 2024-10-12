@@ -73,3 +73,5 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
     res.status(400).json({ error: "mealの更新に失敗しました" });
   }
 });
+
+export default router;

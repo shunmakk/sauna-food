@@ -69,3 +69,5 @@ router.get("/:id", async (req: any, res: any) => {
     res.json(500).json({ error: "レビューの取得に失敗" });
   }
 });
+
+export default router;
