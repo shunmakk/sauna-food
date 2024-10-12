@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 //サウナ飯の登録
 router.post("/", authMiddleware, async (req: Request, res: Response) => {
-  const { name, description, price, facilityId } = req.body;
+  const { name, description, price, facilityId, imageUrl } = req.body;
   try {
     const createMealData = await prisma.saunaMeal.create({
       data: {
@@ -15,6 +15,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
         description,
         price,
         facilityId,
+        imageUrl,
       },
     });
     res.status(201).json(createMealData);
@@ -44,8 +45,15 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 //特定の飯を取得
-router.get("/facility/:facilityId", async (res: Response, req: Request) => {
-  const { facilityId } = req.params;
+router.get("/facility/:facilityId", async (req: any, res: any) => {
+  console.log("Request params:", req.params);
+  console.log("Request query:", req.query);
+
+  const facilityId = req.params.facilityId;
+
+  if (!facilityId) {
+    return res.status(400).json({ error: "facilityIdが必要" });
+  }
 
   try {
     const saunaMealDetail = await prisma.saunaMeal.findMany({
@@ -54,7 +62,39 @@ router.get("/facility/:facilityId", async (res: Response, req: Request) => {
     });
     res.json(saunaMealDetail);
   } catch (error) {
-    res.status(500).json({ error: "mealの取得に失敗しました" });
+    res.status(500).json({ error: "サウナ飯の取得に失敗しました" });
+  }
+});
+
+// 特定のサウナ飯の詳細を取得
+router.get("/:id", async (req: any, res: any) => {
+  const { id } = req.params;
+
+  try {
+    const saunaMeal = await prisma.saunaMeal.findUnique({
+      where: { id },
+      include: {
+        facility: true,
+        reviews: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!saunaMeal) {
+      return res.status(404).json({ error: "サウナ飯が見つかりません" });
+    }
+
+    res.json(saunaMeal);
+  } catch (error) {
+    res.status(500).json({ error: "サウナ飯の取得に失敗しました" });
   }
 });
 
