@@ -8,8 +8,14 @@ const prsima = new PrismaClient();
 
 //投稿
 router.post("/", authMiddleware, async (req: any, res: Response) => {
-  const { overallRating, tasteRating, valueRating, comment, saunaMealId } =
-    req.body;
+  const {
+    overallRating,
+    tasteRating,
+    valueRating,
+    comment,
+    saunaMealId,
+    imageUrl,
+  } = req.body;
   const userId = req.user?.uid;
 
   try {
@@ -19,6 +25,7 @@ router.post("/", authMiddleware, async (req: any, res: Response) => {
         tasteRating,
         valueRating,
         comment,
+        imageUrl,
         userId,
         saunaMealId,
       },
