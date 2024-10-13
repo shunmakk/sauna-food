@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../../../context/AuthContext";
+import ReviewForm from "../../../../components/reviews/ReviewForm";
 
 interface SaunaMeal {
   id: string;
@@ -38,24 +39,29 @@ export default function SaunaMealDetail({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const [showMReviewForm, setShowReviewForm] = useState(false);
+
+  const fetchSaunaMeal = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/sauna-meals/${params.id}`
+      );
+      setSaunaMeal(res.data);
+    } catch (err) {
+      setError("サウナ飯の取得に失敗しました");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSaunaMeal = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/sauna-meals/${params.id}`
-        );
-        setSaunaMeal(response.data);
-      } catch (err) {
-        setError("サウナ飯の取得に失敗しました");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSaunaMeal();
   }, [params.id]);
+
+  const handleReviewAdded = () => {
+    fetchSaunaMeal(); // レビューが追加されたら、サウナ飯の情報を再取得
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -80,6 +86,19 @@ export default function SaunaMealDetail({
       <p className="mb-4">
         <strong>施設:</strong> {saunaMeal.facility.name}
       </p>
+      <button
+        onClick={() => setShowReviewForm(!showMReviewForm)}
+        className="bg-green-500 text-white p-2 rounded mt-4"
+      >
+        {showMReviewForm ? "❌" : "新しくレビューを投稿"}
+      </button>
+
+      {showMReviewForm && (
+        <ReviewForm
+          saunaMealId={saunaMeal.id}
+          onReviewAdded={handleReviewAdded}
+        />
+      )}
 
       <h2 className="text-2xl font-bold mt-8 mb-4">レビュー</h2>
       {saunaMeal.reviews.length > 0 ? (
