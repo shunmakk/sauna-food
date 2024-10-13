@@ -1,38 +1,38 @@
 import { PrismaClient } from ".prisma/client";
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
-import { error } from "console";
 
 const router = express.Router();
 const prsima = new PrismaClient();
 
 //投稿
-router.post("/", authMiddleware, async (req: any, res: Response) => {
-  const {
-    overallRating,
-    tasteRating,
-    valueRating,
-    comment,
-    saunaMealId,
-    imageUrl,
-  } = req.body;
+router.post("/", authMiddleware, async (req: any, res: any) => {
+  const { overallRating, tasteRating, valueRating, comment, saunaMealId } =
+    req.body;
   const userId = req.user?.uid;
 
+  //認証ハンドリング
+  if (!userId) {
+    return res.status(401).json({ error: "認証が必要です" });
+  }
+  //入力ハンドリング(他のルーター必要かも)
+  if (!overallRating || !tasteRating || !valueRating || !saunaMealId) {
+    return res.status(400).json({ error: "必須フィールドが不足しています" });
+  }
   try {
     const createReview = await prsima.review.create({
       data: {
-        overallRating,
-        tasteRating,
-        valueRating,
+        overallRating: Number(overallRating), //number型に強制変換
+        tasteRating: Number(tasteRating),
+        valueRating: Number(valueRating),
         comment,
-        imageUrl,
-        userId,
-        saunaMealId,
+        user: { connect: { id: userId } },
+        saunaMeal: { connect: { id: saunaMealId } },
       },
     });
     res.status(201).json(createReview);
   } catch (error) {
-    res.status(400).json({ error: "レビューの投稿に成功" });
+    res.status(400).json({ error: "レビューの投稿に失敗" });
   }
 });
 
