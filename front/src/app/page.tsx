@@ -26,6 +26,12 @@ export default function Home() {
           >
             サウナ施設一覧
           </Link>
+          <Link
+            href="/sauna-meals"
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg text-lg sm:text-xl font-semibold text-center transition-colors duration-300"
+          >
+            サウナ飯一覧
+          </Link>
         </div>
       </main>
     </>
