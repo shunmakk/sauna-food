@@ -34,7 +34,7 @@ const SaunaMealList: React.FC<SaunaMealListProps> = ({ meals }) => {
             <p className="font-bold">¥{meal.price}</p>
             <Link
               href={`/sauna-meals/${meal.id}`}
-              className="mt-2 inline-block  bg-blue-500 text-white px-4 py-2 rounded"
+              className="text-blue-500 hover:underline"
             >
               詳細を見る
             </Link>
