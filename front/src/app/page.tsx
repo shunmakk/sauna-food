@@ -7,7 +7,7 @@ export default function Home() {
         <h1 className="text-2xl  mt-6  md:text-4xl font-bold text-center mb:mb-16 text-gray-800">
           サ飯レビューへようこそ
         </h1>
-        <div className="flex flex-col sm:flex-row sm:justify-center gap-6 mt-16 sm:mt-32 w-full max-w-xl">
+        <div className="flex flex-col sm:flex-row sm:justify-center gap-6 mt-16 sm:mt-32 w-full max-w-7xl">
           <Link
             href="/register"
             className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-4 rounded-lg text-lg sm:text-xl font-semibold text-center transition-colors duration-300"
