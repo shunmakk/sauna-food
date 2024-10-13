@@ -5,6 +5,8 @@ import morgan from "morgan";
 import { config } from "dotenv";
 import authRoutes from "./routes/auth";
 import saunaFacilityRoutes from "./routes/Facilities";
+import mealsRoutes from "./routes/Meals";
+import reviewRoutes from "./routes/review";
 
 config();
 
@@ -25,10 +27,14 @@ app.get("/", (req, res) => {
   res.json({ message: "API" });
 });
 
-//ユーザー認証ルートを追加
+//ユーザー認証ルート
 app.use("/api/auth", authRoutes);
 //サウナ施設ルート
 app.use("/api/sauna-facilities", saunaFacilityRoutes);
+//サウナ飯ルート
+app.use("/api/sauna-meals", mealsRoutes);
+//レビュールート
+app.use("/api/reviews", reviewRoutes);
 
 // エラーハンドリング
 app.use(

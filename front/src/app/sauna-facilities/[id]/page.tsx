@@ -5,6 +5,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../../../context/AuthContext";
+import SaunaMealForm from "../../../../components/sauna-meals/SaunaMealForm";
+import SaunaMealList from "../../../../components/sauna-meals/SaunaMealList";
 
 interface SaunaFacility {
   id: string;
@@ -17,30 +19,44 @@ interface SaunaFacility {
   };
 }
 
+interface SaunaMeal {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+}
+
 export default function SaunaFacilityDetail({
   params,
 }: {
   params: { id: string };
 }) {
   const [facility, setFacility] = useState<SaunaFacility | null>(null);
+  const [saunaMeals, setSaunaMeals] = useState<SaunaMeal[]>([]);
   const [error, setError] = useState("");
   const router = useRouter();
+  const [showMealForm, setShowMealForm] = useState(false);
   const { user } = useAuth();
 
   //とりあえずクライアント側でデータ取得
   useEffect(() => {
-    const fetchFaclity = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/sauna-facilities/${params.id}`
-        );
-        setFacility(res.data);
+        const [facilityRes, mealsRes] = await Promise.all([
+          axios.get(`http://localhost:5000/api/sauna-facilities/${params.id}`),
+          axios.get(
+            `http://localhost:5000/api/sauna-meals/facility/${params.id}`
+          ),
+        ]);
+        setFacility(facilityRes.data);
+        setSaunaMeals(mealsRes.data);
       } catch (e) {
-        setError("サウナ施設の取得に失敗しました");
+        setError("データの取得に失敗しました");
       }
     };
-    fetchFaclity();
-  }, []);
+    fetchData();
+  }, [params.id]);
 
   //削除機能(便宜上としてあるものなので、リリースするとしたら仕様変更するか消す)
   const handleDelete = async () => {
@@ -61,6 +77,18 @@ export default function SaunaFacilityDetail({
       } catch (e) {
         setError("削除に失敗しました");
       }
+    }
+  };
+
+  const handleMealSuccess = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/sauna-meals/facility/${params.id}`
+      );
+      setSaunaMeals(res.data);
+      setShowMealForm(false);
+    } catch (e) {
+      setError("サウナ飯の更新に失敗しました");
     }
   };
 
@@ -95,8 +123,19 @@ export default function SaunaFacilityDetail({
             戻る
           </Link>
         </div>
-
         {error && <p className="text-red-500 mt-4">{error}</p>}
+        <button
+          onClick={() => setShowMealForm(!showMealForm)}
+          className="bg-green-500 text-white p-2 rounded mt-4"
+        >
+          {showMealForm ? "フォームを閉じる" : "新しくサウナ飯を追加"}
+        </button>
+
+        {showMealForm && (
+          <SaunaMealForm facilityId={params.id} onSuccess={handleMealSuccess} />
+        )}
+        <h2 className="text-2xl font-bold mt-8 mb-4">サウナ飯一覧</h2>
+        <SaunaMealList meals={saunaMeals} />
       </div>
     </div>
   );

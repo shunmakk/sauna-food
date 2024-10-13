@@ -37,6 +37,7 @@ model SaunaMeal {
   name        String
   description String?
   price       Int
+  imageUrl      String?
   facility    SaunaFacility @relation(fields: [facilityId], references: [id])
   facilityId  String        // facilityIdもString型に変更
   createdAt   DateTime      @default(now())
