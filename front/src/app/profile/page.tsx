@@ -34,10 +34,14 @@ export default function UserProfile() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user: authUser } = useAuth();
+  const { user: authUser, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    if (authLoading) {
+      // 認証状態の読み込み中は何もしない
+      return;
+    }
     if (!authUser) {
       router.push("/login");
       return;
@@ -66,9 +70,9 @@ export default function UserProfile() {
     };
 
     fetchUserData();
-  }, [authUser, router]);
+  }, [authUser, authLoading, router]);
 
-  if (loading) return <div>Loading...</div>;
+  if (authLoading || loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!user) return <div>ユーザー情報が見つかりません</div>;
 
