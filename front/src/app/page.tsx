@@ -32,6 +32,12 @@ export default function Home() {
           >
             サウナ飯一覧
           </Link>
+          <Link
+            href="/profile"
+            className="bg-rose-500 hover:bg-rose-500 text-white px-6 py-4 rounded-lg text-lg sm:text-xl font-semibold text-center transition-colors duration-300"
+          >
+            プロフィール
+          </Link>
         </div>
       </main>
     </>
