@@ -108,7 +108,7 @@ export default function UserProfile() {
                   <strong>味:</strong> {review.tasteRating}/5
                 </p>
                 <p>
-                  <strong>価値:</strong> {review.valueRating}/5
+                  <strong>価格:</strong> {review.valueRating}/5
                 </p>
                 <p>
                   <strong>コメント:</strong> {review.comment}

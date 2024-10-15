@@ -110,7 +110,7 @@ export default function SaunaMealDetail({
               </p>
               <p>総合評価: {review.overallRating}/5</p>
               <p>味: {review.tasteRating}/5</p>
-              <p>価値: {review.valueRating}/5</p>
+              <p>価格: {review.valueRating}/5</p>
               <p>{review.comment}</p>
             </li>
           ))}

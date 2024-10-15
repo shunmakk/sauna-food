@@ -74,7 +74,7 @@ export default function ReviewForm({
         />
       </div>
       <div className="mb-4">
-        <label className="block mb-2">価値の評価</label>
+        <label className="block mb-2">価格の評価</label>
         <input
           {...register("valueRating", { required: true, min: 1, max: 5 })}
           type="number"
