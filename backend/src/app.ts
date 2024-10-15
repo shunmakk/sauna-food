@@ -7,11 +7,11 @@ import authRoutes from "./routes/auth";
 import saunaFacilityRoutes from "./routes/Facilities";
 import mealsRoutes from "./routes/Meals";
 import reviewRoutes from "./routes/review";
+import profileRoutes from "./routes/Priofile";
 
 config();
 
 const app = express();
-
 //ミドルウェア
 app.use(
   cors({
@@ -35,6 +35,8 @@ app.use("/api/sauna-facilities", saunaFacilityRoutes);
 app.use("/api/sauna-meals", mealsRoutes);
 //レビュールート
 app.use("/api/reviews", reviewRoutes);
+//プロフィールルート
+app.use("/api/users", profileRoutes);
 
 // エラーハンドリング
 app.use(
