@@ -6,31 +6,51 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 //登録
-router.post("/", authMiddleware, async (req: any, res: any) => {
+router.post("/", authMiddleware, async (req: any, res: any, next: any) => {
   const { name, address, description } = req.body;
-  const createdById = req.user?.uid;
+  const userId = req.user?.uid;
 
-  if (!createdById) {
+  if (!userId) {
     return res
       .status(401)
       .json({ error: "認証に失敗しました(ユーザーがいない可能性あり)" });
   }
 
   try {
-    const makeSaunaFaciltiy = await prisma.saunaFacility.create({
-      data: {
-        name,
-        address,
-        description,
-        createdBy: {
-          connect: { id: createdById },
-        },
-      },
+    // ユーザーの存在確認
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
     });
-    res.status(201).json(makeSaunaFaciltiy);
-  } catch (e) {
-    console.error(e); // エラーの詳細をログに出力
-    res.status(400).json({ error: "サウナ施設のデータ作成失敗" });
+
+    if (!user) {
+      return res.status(404).json({ error: "ユーザーが見つかりません" });
+    }
+
+    // トランザクションを使用してサウナ施設を作成
+    const makeSaunaFacility = await prisma.$transaction(async (prisma) => {
+      return prisma.saunaFacility.create({
+        data: {
+          name,
+          address,
+          description,
+          createdBy: {
+            connect: { id: userId },
+          },
+        },
+        include: {
+          createdBy: true,
+        },
+      });
+    });
+
+    res.status(201).json(makeSaunaFacility);
+  } catch (error: any) {
+    console.error("サウナ施設作成エラー:", error);
+    if (error.code === "P2025") {
+      res.status(400).json({ error: "関連するユーザーが見つかりません" });
+    } else {
+      next(error);
+    }
   }
 });
 
