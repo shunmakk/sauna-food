@@ -43,13 +43,14 @@ export default function Register() {
         }
       );
 
-      // ダッシュボードにリダイレクト
-      router.push("/dashboard");
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      setError(
-        `Failed to register: ${error.response?.data?.error || "Unknown error"}`
-      );
+      //profileに変移
+      router.push("/profile");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(`登録エラー: ${error.message}`);
+      } else {
+        setError("登録エラー: 予期せぬエラーが発生しました");
+      }
     }
   };
 
@@ -58,11 +59,20 @@ export default function Register() {
       <h1>登録</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <p>ニックネーム</p>
-        <input {...register("name")} type="text" placeholder="名前" required />
+        <input
+          {...register("name")}
+          type="text"
+          name="name"
+          autoComplete="name"
+          placeholder="ニックネームを6文字以内で"
+          required
+          maxLength={6}
+        />
         <p>メールアドレス</p>
         <input
           {...register("email")}
           type="email"
+          name="email"
           placeholder="メールアドレス"
           required
         />
@@ -70,12 +80,13 @@ export default function Register() {
         <input
           {...register("password")}
           type="password"
+          name="password"
           placeholder="パスワードを入力してください"
           required
           minLength={6}
         />
         <div>
-          <button type="submit">登録する</button>
+          <button type="submit">新規登録する</button>
         </div>
       </form>
       {error && <p>{error}</p>}
