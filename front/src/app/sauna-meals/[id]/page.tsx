@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../../../../context/AuthContext";
+// import { useAuth } from "../../../../context/AuthContext";
 import ReviewForm from "../../../../components/reviews/ReviewForm";
+import Image from "next/image";
 
 interface SaunaMeal {
   id: string;
@@ -38,10 +39,10 @@ export default function SaunaMealDetail({
   const [saunaMeal, setSaunaMeal] = useState<SaunaMeal | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [showMReviewForm, setShowReviewForm] = useState(false);
 
-  const fetchSaunaMeal = async () => {
+  const fetchSaunaMeal = useCallback(async () => {
     try {
       const res = await axios.get(
         `http://localhost:5000/api/sauna-meals/${params.id}`
@@ -53,11 +54,11 @@ export default function SaunaMealDetail({
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
 
   useEffect(() => {
     fetchSaunaMeal();
-  }, [params.id]);
+  }, [fetchSaunaMeal]);
 
   const handleReviewAdded = () => {
     fetchSaunaMeal(); // レビューが追加されたら、サウナ飯の情報を再取得
@@ -71,10 +72,12 @@ export default function SaunaMealDetail({
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">{saunaMeal.name}</h1>
       {saunaMeal.imageUrl && (
-        <img
+        <Image
           src={saunaMeal.imageUrl}
           alt={saunaMeal.name}
-          className="w-full max-w-md mb-4"
+          width={1000}
+          height={500}
+          className=" max-w-md mb-4"
         />
       )}
       <p className="mb-2">
