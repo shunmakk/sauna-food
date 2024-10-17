@@ -54,19 +54,30 @@ export default function SaunaFacilityList() {
       <div className="container mx-auto p-4">
         <h1 className="text-4xl font-bold mb-6">サウナ施設一覧</h1>
         {error && <p className="text-red-500 mt-4">{error}</p>}
-        <div className="flex  flex-col gap-3   md:flex-row   md:justify-between md:items-center">
+        <div className="flex  flex-col gap-6   md:flex-row   md:justify-between md:items-center">
           <Link
             href="/sauna-facilities/create"
             className="bg-green-500 text-white text-center p-2 rounded"
           >
             新規サウナ施設を追加
           </Link>
-          <input
-            type="text"
-            placeholder="施設名、住所を検索"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setSearchTerm(e.currentTarget.query.value);
+            }}
+            className="text-center"
+          >
+            <input
+              type="search"
+              name="query"
+              className="rounded py-2 px-4 text-left border border-blue-500"
+              placeholder="施設名、住所を検索"
+            />
+            <button className="ml-2 text-white bg-blue-500 rounded py-2.5 px-4 hover:opacity-75 border border-blue-500">
+              検索する
+            </button>
+          </form>
         </div>
 
         <ul className="mt-8 space-y-2">
