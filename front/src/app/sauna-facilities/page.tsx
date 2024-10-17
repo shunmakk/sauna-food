@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import SearchBar from "../../../components/common/SearchBar";
 
 interface SaunaFacilityList {
   id: string;
@@ -61,23 +62,10 @@ export default function SaunaFacilityList() {
           >
             新規サウナ施設を追加
           </Link>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setSearchTerm(e.currentTarget.query.value);
-            }}
-            className="text-center"
-          >
-            <input
-              type="search"
-              name="query"
-              className="rounded py-2 px-4 text-left border border-blue-500"
-              placeholder="施設名、住所を検索"
-            />
-            <button className="ml-2 text-white bg-blue-500 rounded py-2.5 px-4 hover:opacity-75 border border-blue-500">
-              検索する
-            </button>
-          </form>
+          <SearchBar
+            setSearchTerm={setSearchTerm}
+            placeholder={"施設名、住所を検索"}
+          />
         </div>
 
         <ul className="mt-8 space-y-2">
