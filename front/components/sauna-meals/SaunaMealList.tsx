@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface SaunaMeal {
   id: string;
@@ -22,11 +23,12 @@ const SaunaMealList: React.FC<SaunaMealListProps> = ({ meals }) => {
             <h3 className="text-xl font-semibold">{meal.name}</h3>
             <div>
               {meal.imageUrl && (
-                <img
+                <Image
                   src={meal.imageUrl}
                   alt={meal.name}
                   width={500}
-                  className=" h-48 object-cover mt-2"
+                  height={200}
+                  className="object-cover mt-2"
                 />
               )}
             </div>

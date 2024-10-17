@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 
 interface SaunaMeal {
   id: string;
@@ -13,7 +14,7 @@ interface SaunaMeal {
   facility: { id: string; name: string };
 }
 
-export default function saunaMealList() {
+export default function SaunaMealList() {
   const [saunaMeal, setSaunaMeal] = useState<SaunaMeal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +25,7 @@ export default function saunaMealList() {
         const res = await axios.get("http://localhost:5000/api/sauna-meals");
         setSaunaMeal(res.data);
       } catch (error) {
+        console.error("サウナ飯の取得中にエラーが発生しました:", error);
         setError("サウナ飯の取得に失敗しました");
       } finally {
         setLoading(false);
@@ -44,9 +46,11 @@ export default function saunaMealList() {
             <div key={meal.id} className="border p-4 rounded shadow">
               <h2 className="text-xl font-semibold">{meal.name}</h2>
               {meal.imageUrl && (
-                <img
+                <Image
                   src={meal.imageUrl}
                   alt={meal.name}
+                  width={500}
+                  height={200}
                   className="w-full h-48 object-cover my-2"
                 />
               )}
