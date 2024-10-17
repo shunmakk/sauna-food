@@ -37,8 +37,9 @@ export default function EditSaunaFacility({
         setValue("name", faclity?.name);
         setValue("address", faclity?.address);
         setValue("description", faclity?.escription);
-      } catch (e) {
-        setError("サウナ施設の取得に成功しました");
+      } catch (error) {
+        console.error("サウナ施設取得エラー:", error);
+        setError("サウナ施設の取得に失敗しました");
       }
     };
     fetchFaclity();
@@ -61,7 +62,8 @@ export default function EditSaunaFacility({
         }
       );
       router.push("/");
-    } catch (e) {
+    } catch (error) {
+      console.error("編集エラー", error);
       setError("編集に失敗しました");
     }
   };

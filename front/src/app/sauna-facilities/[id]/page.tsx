@@ -51,7 +51,8 @@ export default function SaunaFacilityDetail({
         ]);
         setFacility(facilityRes.data);
         setSaunaMeals(mealsRes.data);
-      } catch (e) {
+      } catch (error) {
+        console.error("施設データ取得エラー", error);
         setError("データの取得に失敗しました");
       }
     };
@@ -74,7 +75,8 @@ export default function SaunaFacilityDetail({
           }
         );
         router.push("/sauna-facilities");
-      } catch (e) {
+      } catch (error) {
+        console.error("削除エラー", error);
         setError("削除に失敗しました");
       }
     }
@@ -87,7 +89,8 @@ export default function SaunaFacilityDetail({
       );
       setSaunaMeals(res.data);
       setShowMealForm(false);
-    } catch (e) {
+    } catch (error) {
+      console.error("サウナ飯更新エラー", error);
       setError("サウナ飯の更新に失敗しました");
     }
   };

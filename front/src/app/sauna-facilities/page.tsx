@@ -22,7 +22,8 @@ export default function SaunaFacilityList() {
           "http://localhost:5000/api/sauna-facilities"
         );
         setFacilities(res.data);
-      } catch (e) {
+      } catch (error) {
+        console.error("サウナ施設取得エラー", error);
         setError("サウナ施設の取得に失敗しました");
       }
     };

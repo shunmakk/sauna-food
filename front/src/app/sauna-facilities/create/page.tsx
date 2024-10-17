@@ -31,17 +31,14 @@ export default function CreateSaunaFacility() {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/sauna-facilities",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${await user.getIdToken()}`,
-          },
-        }
-      );
+      await axios.post("http://localhost:5000/api/sauna-facilities", data, {
+        headers: {
+          Authorization: `Bearer ${await user.getIdToken()}`,
+        },
+      });
       router.push("/sauna-facilities");
     } catch (error) {
+      console.error("サウナ施設作成エラー", error);
       setError("サウナ施設の作成に失敗しました");
     }
   };
