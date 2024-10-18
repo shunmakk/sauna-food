@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/config/firebase";
 import { useAuth } from "../../context/AuthContext";
+import Image from "next/image";
 
 interface SaunaMealFromData {
   name: string;
@@ -125,7 +126,9 @@ export default function SaunaMealForm({
           className="w-full p-2 border rounded"
         />
         {imageUrl && (
-          <img
+          <Image
+            width={200}
+            height={100}
             src={imageUrl}
             alt="Uploaded preview"
             className="mt-2 max-w-xs"
