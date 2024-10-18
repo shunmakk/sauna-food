@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import SearchBar from "../../../components/common/SearchBar";
+import PageNation from "../../../components/common/PageNation";
 
 interface SaunaFacilityList {
   id: string;
@@ -81,26 +82,12 @@ export default function SaunaFacilityList() {
             </li>
           ))}
         </ul>
-        <div className="flex justify-center mt-12">
-          {Array.from(
-            {
-              length: Math.ceil(filterFacilities.length / facilitiesPerPage),
-            },
-            (_, i) => (
-              <button
-                key={i}
-                onClick={() => paginate(i + 1)}
-                className={`px-3 py-2 ml-2 rounded-lg ${
-                  currentPage === i + 1
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-blue-600"
-                }`}
-              >
-                {i + 1}
-              </button>
-            )
-          )}
-        </div>
+        <PageNation
+          filterContent={filterFacilities}
+          PerPage={facilitiesPerPage}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   );
