@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 // import { useAuth } from "../../../../context/AuthContext";
 import ReviewForm from "../../../../components/reviews/ReviewForm";
@@ -64,6 +64,28 @@ export default function SaunaMealDetail({
     fetchSaunaMeal(); // レビューが追加されたら、サウナ飯の情報を再取得
   };
 
+  const reviewList = useMemo(
+    () =>
+      saunaMeal?.reviews && saunaMeal.reviews.length > 0 ? (
+        <ul>
+          {saunaMeal?.reviews?.map((review) => (
+            <li key={review.id} className="mb-4 p-4 border rounded">
+              <p>
+                <strong>{review.user.name}</strong>
+              </p>
+              <p>総合評価: {review.overallRating}/5</p>
+              <p>味: {review.tasteRating}/5</p>
+              <p>価格: {review.valueRating}/5</p>
+              <p>{review.comment}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>まだレビューがありません。</p>
+      ),
+    [saunaMeal?.reviews]
+  );
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!saunaMeal) return <div>サウナ飯が見つかりません</div>;
@@ -104,7 +126,8 @@ export default function SaunaMealDetail({
       )}
 
       <h2 className="text-2xl font-bold mt-8 mb-4">レビュー</h2>
-      {saunaMeal.reviews.length > 0 ? (
+      {reviewList}
+      {/* {saunaMeal.reviews.length > 0 ? (
         <ul>
           {saunaMeal.reviews.map((review) => (
             <li key={review.id} className="mb-4 p-4 border rounded">
@@ -120,7 +143,7 @@ export default function SaunaMealDetail({
         </ul>
       ) : (
         <p>まだレビューがありません。</p>
-      )}
+      )} */}
     </div>
   );
 }

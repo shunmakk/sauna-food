@@ -20,6 +20,7 @@ export default function Login() {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       router.push("/dashboard");
     } catch (error) {
+      console.error("ログインエラー", error);
       setError("ログインに失敗.");
     }
   };
