@@ -39,7 +39,6 @@ export default function SaunaMealDetail({
   const [saunaMeal, setSaunaMeal] = useState<SaunaMeal | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // const { user } = useAuth();
   const [showMReviewForm, setShowReviewForm] = useState(false);
 
   const fetchSaunaMeal = useCallback(async () => {
@@ -127,23 +126,6 @@ export default function SaunaMealDetail({
 
       <h2 className="text-2xl font-bold mt-8 mb-4">レビュー</h2>
       {reviewList}
-      {/* {saunaMeal.reviews.length > 0 ? (
-        <ul>
-          {saunaMeal.reviews.map((review) => (
-            <li key={review.id} className="mb-4 p-4 border rounded">
-              <p>
-                <strong>{review.user.name}</strong>
-              </p>
-              <p>総合評価: {review.overallRating}/5</p>
-              <p>味: {review.tasteRating}/5</p>
-              <p>価格: {review.valueRating}/5</p>
-              <p>{review.comment}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>まだレビューがありません。</p>
-      )} */}
     </div>
   );
 }
