@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 // import { useAuth } from "../../../../context/AuthContext";
-import ReviewForm from "../../../../components/reviews/ReviewForm";
+import ReviewForm from "../../../components/reviews/ReviewForm";
 import Image from "next/image";
 
 interface SaunaMeal {

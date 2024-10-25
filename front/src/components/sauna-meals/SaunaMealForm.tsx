@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/config/firebase";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import Image from "next/image";
 
 interface SaunaMealFromData {

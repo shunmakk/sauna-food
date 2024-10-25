@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-import SearchBar from "../../../components/common/SearchBar";
-import PageNation from "../../../components/common/PageNation";
+import SearchBar from "../../components/common/SearchBar";
+import PageNation from "../../components/common/PageNation";
 
 interface SaunaFacilityList {
   id: string;

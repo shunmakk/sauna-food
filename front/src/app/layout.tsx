@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "../../context/AuthContext";
-import Footer from "../../components/layout/Footer";
+import Footer from "../components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "サ飯レビュー",

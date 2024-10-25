@@ -5,8 +5,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../../../../context/AuthContext";
-import SaunaMealForm from "../../../../components/sauna-meals/SaunaMealForm";
-import SaunaMealList from "../../../../components/sauna-meals/SaunaMealList";
+import SaunaMealForm from "../../../components/sauna-meals/SaunaMealForm";
+import SaunaMealList from "../../../components/sauna-meals/SaunaMealList";
 
 interface SaunaFacility {
   id: string;
