@@ -14,7 +14,7 @@ const Header: React.FC = () => {
               <li>
                 <Link
                   href="/register"
-                  className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300"
+                  className="bg-blue-800 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300"
                 >
                   新規登録
                 </Link>
@@ -22,7 +22,7 @@ const Header: React.FC = () => {
               <li>
                 <Link
                   href="/login"
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300"
+                  className="bg-blue-600 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300"
                 >
                   ログイン
                 </Link>
