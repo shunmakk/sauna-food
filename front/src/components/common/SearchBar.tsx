@@ -1,4 +1,5 @@
 import React from "react";
+import { FaSearch } from "react-icons/fa";
 
 interface SearchBarProps {
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
@@ -18,12 +19,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
         }}
         className="text-center"
       >
-        <input
-          type="search"
-          name="query"
-          className="rounded py-2 px-4 text-left border border-blue-500"
-          placeholder={placeholder}
-        />
+        <div className="relative inline-block">
+          <input
+            type="search"
+            name="query"
+            className="rounded py-2 pl-10 pr-4 text-left border border-blue-500 outline-none"
+            placeholder={placeholder}
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
         <button className="ml-2 text-white bg-blue-500 rounded py-2.5 px-4 hover:opacity-75 border border-blue-500">
           検索する
         </button>
