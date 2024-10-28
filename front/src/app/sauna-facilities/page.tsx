@@ -83,6 +83,11 @@ export default function SaunaFacilityList() {
               <div>{facility.address}</div>
             </li>
           ))}
+          {!filterFacilities.length && (
+            <div className="col-span-3 flex items-center justify-center mt-52">
+              <p className="text-center">該当するサウナ施設はありません</p>
+            </div>
+          )}
         </ul>
         <PageNation
           filterContent={filterFacilities}

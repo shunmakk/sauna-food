@@ -94,6 +94,11 @@ export default function SaunaMealList() {
               </Link>
             </div>
           ))}
+          {!filterMeals.length && (
+            <div className="col-span-3 flex items-center justify-center mt-52">
+              <p className="text-center">該当するサウナ飯はありません</p>
+            </div>
+          )}
         </div>
         <PageNation
           filterContent={filterMeals}
