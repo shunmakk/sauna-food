@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "@/components/common/Header";
 
 interface SaunaMeal {
   id: string;
@@ -38,8 +39,9 @@ export default function SaunaMealList() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-8 sm:p-24 bg-gray-100">
-      <div className="container mx-auto p-4">
+    <div className="flex flex-col min-h-[97vh] bg-gray-100 relative">
+      <Header />
+      <div className="container mx-auto p-4 mt-12">
         <h1 className="text-4xl font-bold mb-6">サウナ飯一覧</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {saunaMeal?.map((meal) => (

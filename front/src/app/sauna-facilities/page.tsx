@@ -5,6 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import SearchBar from "../../components/common/SearchBar";
 import PageNation from "../../components/common/PageNation";
+import Header from "@/components/common/Header";
 
 interface SaunaFacilityList {
   id: string;
@@ -52,8 +53,9 @@ export default function SaunaFacilityList() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-8 sm:p-24 bg-gray-100">
-      <div className="container mx-auto p-4">
+    <div className="flex flex-col min-h-[97vh] bg-gray-100 relative">
+      <Header />
+      <div className="container mx-auto p-4 mt-12">
         <h1 className="text-4xl font-bold mb-6">サウナ施設一覧</h1>
         {error && <p className="text-red-500 mt-4">{error}</p>}
         <div className="flex  flex-col gap-6   md:flex-row   md:justify-between md:items-center">
