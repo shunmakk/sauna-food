@@ -19,7 +19,10 @@ export default function Login() {
   const onSubmit = async (data: LoginForm) => {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
-      router.push("/dashboard");
+      router.push("/");
+      setTimeout(() => {
+        alert("ログインに成功しました");
+      }, 800);
     } catch (error) {
       console.error("ログインエラー", error);
       setError("ログインに失敗.");
