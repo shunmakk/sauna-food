@@ -1,7 +1,14 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import LogoutButton from "../auth/LogoutButton";
+import LoginButton from "../auth/LoginButton";
+import RegisterButton from "../auth/RegisterButton";
+import { useAuth } from "../../../context/AuthContext";
 
 const Header: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <header className="bg-white shadow-md p-4">
@@ -11,22 +18,20 @@ const Header: React.FC = () => {
           </h1>
           <nav>
             <ul className="flex gap-4">
-              <li>
-                <Link
-                  href="/register"
-                  className="bg-blue-800 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300"
-                >
-                  新規登録
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/login"
-                  className="bg-blue-600 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300"
-                >
-                  ログイン
-                </Link>
-              </li>
+              {!user && (
+                <li>
+                  <RegisterButton className="bg-blue-800 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300" />
+                </li>
+              )}
+              {user ? (
+                <li>
+                  <LogoutButton className="bg-blue-500 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300" />
+                </li>
+              ) : (
+                <li>
+                  <LoginButton className="bg-blue-600 hover:bg-cyan-600 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-300" />
+                </li>
+              )}
             </ul>
           </nav>
         </div>
