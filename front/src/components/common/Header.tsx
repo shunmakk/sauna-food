@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="bg-white shadow-md p-4">
-        <div className="container mx-auto flex justify-between items-center py-2">
+        <div className="container mx-auto flex justify-between items-center py-2 h-12">
           <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-300">
             <Link href="/">サ飯レビュー</Link>
           </h1>
