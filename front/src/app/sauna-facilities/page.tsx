@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Link from "next/link";
 import SearchBar from "../../components/common/SearchBar";
 import PageNation from "../../components/common/PageNation";
 import Header from "@/components/common/Header";
+import { fetchSaunaFacilities } from "../actions/saunaFacilities";
 
 interface SaunaFacilityList {
   id: string;
@@ -19,22 +19,23 @@ export default function SaunaFacilityList() {
   const [searchTerm, setSearchTerm] = useState(""); //検索ワード
   const [currentPage, setCurrentPage] = useState(1); //初期ページ
   const [facilitiesPerPage] = useState(6); //1ページあたりの施設数
+  const [loading, setLoading] = useState(true);
 
-  //とりあえうデータはクライアント側で取得(後々、apiページで取得に変更)
   useEffect(() => {
-    const fetchData = async () => {
+    const loadFacilities = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/sauna-facilities"
-        );
-        setFacilities(res.data);
+        const data = await fetchSaunaFacilities(searchTerm);
+        setFacilities(data);
       } catch (error) {
         console.error("サウナ施設取得エラー", error);
         setError("サウナ施設の取得に失敗しました");
+      } finally {
+        setLoading(false); // データ取得完了時にローディングを false に
       }
     };
-    fetchData();
-  }, []);
+    loadFacilities();
+  }, [searchTerm]);
 
   //検索機能
   const filterFacilities = facilities.filter(
@@ -42,6 +43,7 @@ export default function SaunaFacilityList() {
       facility.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       facility.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   // ページネーション（ページ数を計算）
   const indexOfLastFacility = currentPage * facilitiesPerPage; //最終施設のindex
   const indexOfFirstFacility = indexOfLastFacility - facilitiesPerPage; //最初の施設のindex
@@ -70,25 +72,30 @@ export default function SaunaFacilityList() {
             placeholder={"施設名、住所を検索"}
           />
         </div>
-
-        <ul className="mt-8 space-y-2">
-          {currentFacilities.map((facility) => (
-            <li key={facility.id} className="border p-2 rounded">
-              <Link
-                href={`/sauna-facilities/${facility.id}`}
-                className="text-blue-500 hover:underline text-2xl"
-              >
-                {facility.name}
-              </Link>
-              <div>{facility.address}</div>
-            </li>
-          ))}
-          {!filterFacilities.length && (
-            <div className="col-span-3 flex items-center justify-center mt-52">
-              <p className="text-center">該当するサウナ施設はありません</p>
-            </div>
-          )}
-        </ul>
+        {loading ? (
+          <div className="col-span-3 flex items-center justify-center mt-52">
+            <p className="text-center">読み込み中...</p>
+          </div>
+        ) : (
+          <ul className="mt-8 space-y-2">
+            {currentFacilities.map((facility) => (
+              <li key={facility.id} className="border p-2 rounded">
+                <Link
+                  href={`/sauna-facilities/${facility.id}`}
+                  className="text-blue-500 hover:underline text-2xl"
+                >
+                  {facility.name}
+                </Link>
+                <div>{facility.address}</div>
+              </li>
+            ))}
+            {currentFacilities.length === 0 && !loading && (
+              <div className="col-span-3 flex items-center justify-center mt-52">
+                <p className="text-center">該当するサウナ施設はありません</p>
+              </div>
+            )}
+          </ul>
+        )}
         <PageNation
           filterContent={filterFacilities}
           PerPage={facilitiesPerPage}
