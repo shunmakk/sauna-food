@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/components/common/SearchBar";
 import PageNation from "@/components/common/PageNation";
 import Header from "@/components/common/Header";
+import { fetchSaunaMeals } from "../actions/saunaMeals";
 
 interface SaunaMeal {
   id: string;
@@ -23,22 +23,23 @@ export default function SaunaMealList() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSarchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [mealsPerPage] = useState(6);
+  const [mealsPerPage] = useState(9);
 
   useEffect(() => {
-    const fetchSaunaMealList = async () => {
+    const loadSaunaMealList = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get("http://localhost:5000/api/sauna-meals");
-        setSaunaMeal(res.data);
+        const data = await fetchSaunaMeals(searchTerm);
+        setSaunaMeal(data);
       } catch (error) {
-        console.error("サウナ飯の取得中にエラーが発生しました:", error);
-        setError("サウナ飯の取得に失敗しました");
+        console.error("サウナ飯一覧の取得中にエラーが発生しました:", error);
+        setError("サウナ飯一覧の取得に失敗しました");
       } finally {
         setLoading(false);
       }
     };
-    fetchSaunaMealList();
-  }, []);
+    loadSaunaMealList();
+  }, [searchTerm]);
 
   const filterMeals = saunaMeal.filter(
     (male) =>
@@ -53,7 +54,6 @@ export default function SaunaMealList() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -67,39 +67,46 @@ export default function SaunaMealList() {
             placeholder={"サウナ飯名を検索"}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {currentMeals?.map((meal) => (
-            <div key={meal.id} className="border p-4 rounded shadow">
-              <h2 className="text-xl font-semibold">{meal.name}</h2>
-              {meal.imageUrl && (
-                <Image
-                  src={meal.imageUrl}
-                  alt={meal.name}
-                  width={500}
-                  height={200}
-                  className="w-full h-48 object-cover my-2"
-                />
-              )}
-              <p>
-                <strong>価格:</strong> {meal.price}円
-              </p>
-              <p>
-                <strong>施設:</strong> {meal.facility.name}
-              </p>
-              <Link
-                href={`/sauna-meals/${meal.id}`}
-                className="text-blue-500 hover:underline"
-              >
-                詳細を見る
-              </Link>
-            </div>
-          ))}
-          {!filterMeals.length && (
-            <div className="col-span-3 flex items-center justify-center mt-52">
-              <p className="text-center">該当するサウナ飯はありません</p>
-            </div>
-          )}
-        </div>
+        {loading ? (
+          <div className="col-span-3 flex items-center justify-center mt-52">
+            <p className="text-center">読み込み中...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {currentMeals?.map((meal) => (
+              <div key={meal.id} className="border p-4 rounded shadow">
+                <h2 className="text-xl font-semibold">{meal.name}</h2>
+                {meal.imageUrl && (
+                  <Image
+                    src={meal.imageUrl}
+                    alt={meal.name}
+                    width={500}
+                    height={200}
+                    className="w-full h-48 object-cover my-2"
+                  />
+                )}
+                <p>
+                  <strong>価格:</strong> {meal.price}円
+                </p>
+                <p>
+                  <strong>施設:</strong> {meal.facility.name}
+                </p>
+                <Link
+                  href={`/sauna-meals/${meal.id}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  詳細を見る
+                </Link>
+              </div>
+            ))}
+            {!filterMeals.length && (
+              <div className="col-span-3 flex items-center justify-center mt-52">
+                <p className="text-center">該当するサウナ飯はありません</p>
+              </div>
+            )}
+          </div>
+        )}
+
         <PageNation
           filterContent={filterMeals}
           PerPage={mealsPerPage}
