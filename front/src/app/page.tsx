@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Header from "@/components/common/Header";
+import Header from "@/components/layout/Header";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
 export default function Home() {

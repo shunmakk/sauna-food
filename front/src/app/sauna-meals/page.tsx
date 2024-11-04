@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/components/common/SearchBar";
 import PageNation from "@/components/common/PageNation";
-import Header from "@/components/common/Header";
+import Header from "@/components/layout/Header";
 import { fetchSaunaMeals } from "../actions/saunaMeals";
 
 interface SaunaMeal {
