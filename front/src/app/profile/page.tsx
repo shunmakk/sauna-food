@@ -72,9 +72,11 @@ export default function UserProfile() {
     fetchUserData();
   }, [authUser, authLoading, router]);
 
-  if (authLoading || loading) return <div>Loading...</div>;
+  if (authLoading || loading)
+    return <div className="text-center">Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!user) return <div>ユーザー情報が見つかりません</div>;
+  const RegisterDate = new Date(user.createdAt).toLocaleDateString();
 
   return (
     <div className="container mx-auto p-4">
@@ -88,8 +90,7 @@ export default function UserProfile() {
           <strong>メールアドレス:</strong> {user.email}
         </p>
         <p>
-          <strong>登録日:</strong>{" "}
-          {new Date(user.createdAt).toLocaleDateString()}
+          <strong>登録日:</strong> {RegisterDate}
         </p>
       </div>
 
