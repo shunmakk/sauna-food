@@ -112,18 +112,20 @@ export default function SaunaMealDetail({
       </p>
       <button
         onClick={() => setShowReviewForm(!showMReviewForm)}
-        className="bg-green-500 text-white p-2 rounded mt-4"
+        className="bg-green-500 text-white p-2 rounded mt-4  border-2 border-green-500"
       >
-        {showMReviewForm ? "❌" : "新しくレビューを投稿"}
+        {showMReviewForm ? (
+          <span className="text-white p-2">✕</span>
+        ) : (
+          "新しくレビューを投稿"
+        )}
       </button>
-
       {showMReviewForm && (
         <ReviewForm
           saunaMealId={saunaMeal.id}
           onReviewAdded={handleReviewAdded}
         />
       )}
-
       <h2 className="text-2xl font-bold mt-8 mb-4">レビュー</h2>
       {reviewList}
     </div>
