@@ -1,20 +1,28 @@
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <main className="flex flex-col min-h-[97vh] bg-gray-100 relative">
       <Header />
       <div className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl">
           <Link
             href="/sauna-facilities"
-            className="group relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
+            className="group relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300  lg:w-80"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-teal-600 opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-br  from-blue-400 to-blue-500 opacity-90"></div>
             <div className="relative p-6 flex flex-col items-center justify-center h-full">
-              <span className="text-white text-2xl font-bold mb-2 flex items-center">
+              <Image
+                src="/sauna.jpg"
+                alt="サウナ施設"
+                width={280}
+                height={100}
+                className="rounded-xl"
+              />
+              <span className="text-white text-2xl font-bold mb-2 flex items-center mt-5">
                 サウナ施設一覧
                 <FaExternalLinkAlt className="ml-2" />
               </span>
@@ -24,11 +32,18 @@ export default function Home() {
           </Link>
           <Link
             href="/sauna-meals"
-            className="group relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
+            className="group relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300  lg:w-80"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-700 opacity-90"></div>
             <div className="relative p-6 flex flex-col items-center justify-center h-full">
-              <span className="text-white text-2xl font-bold mb-2 flex items-center">
+              <Image
+                src="/sauna-food.jpg"
+                alt="サウナ飯"
+                width={280}
+                height={100}
+                className="rounded-xl"
+              />
+              <span className="text-white text-2xl font-bold mb-2 flex items-center mt-5">
                 サウナ飯一覧
                 <FaExternalLinkAlt className="ml-2" />
               </span>
@@ -38,11 +53,12 @@ export default function Home() {
           </Link>
           <Link
             href="/profile"
-            className="group relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
+            className="group relative overflow-hidden rounded-xl shadow-lg transition-transform duration-300  lg:w-80"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-800 to-blue-900 opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-900 opacity-90"></div>
             <div className="relative p-6 flex flex-col items-center justify-center h-full">
-              <span className="text-white text-2xl font-bold mb-2 flex items-center">
+              <Image src="/human.png" alt="人" width={180} height={80} />
+              <span className="text-white text-2xl font-bold mb-2 flex items-center mt-5">
                 プロフィール
                 <FaExternalLinkAlt className="ml-2" />
               </span>
