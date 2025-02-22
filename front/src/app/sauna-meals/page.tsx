@@ -57,9 +57,9 @@ export default function SaunaMealList() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="flex flex-col min-h-[97vh] bg-gray-100 relative">
+    <div className="flex flex-col min-h-screen bg-gray-10">
       <Header />
-      <div className="container mx-auto p-4 mt-12">
+      <div className="container mx-auto p-4 mt-12 relative">
         <h1 className="text-4xl font-bold mb-6">サウナ飯一覧</h1>
         <div className="flex justify-end mb-3">
           <SearchBar
@@ -67,52 +67,58 @@ export default function SaunaMealList() {
             placeholder={"サウナ飯名を検索"}
           />
         </div>
-        {loading ? (
-          <div className="col-span-3 flex items-center justify-center mt-52">
-            <p className="text-center">読み込み中...</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {currentMeals?.map((meal) => (
-              <div key={meal.id} className="border p-4 rounded shadow">
-                <h2 className="text-xl font-semibold">{meal.name}</h2>
-                {meal.imageUrl && (
-                  <Image
-                    src={meal.imageUrl}
-                    alt={meal.name}
-                    width={500}
-                    height={200}
-                    className="w-full h-48 object-cover my-2"
-                  />
-                )}
-                <p>
-                  <strong>価格:</strong> {meal.price}円
-                </p>
-                <p>
-                  <strong>施設:</strong> {meal.facility.name}
-                </p>
-                <Link
-                  href={`/sauna-meals/${meal.id}`}
-                  className="text-blue-500 hover:underline"
+        <div className="md:h-[1150px]">
+          {loading ? (
+            <div className="col-span-3 flex items-center justify-center mt-52">
+              <p className="text-center">読み込み中...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {currentMeals?.map((meal) => (
+                <div
+                  key={meal.id}
+                  className="border p-4 rounded shadow max-h-96"
                 >
-                  詳細を見る
-                </Link>
-              </div>
-            ))}
-            {!filterMeals.length && (
-              <div className="col-span-3 flex items-center justify-center mt-52">
-                <p className="text-center">該当するサウナ飯はありません</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        <PageNation
-          filterContent={filterMeals}
-          PerPage={mealsPerPage}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
+                  <h2 className="text-xl font-semibold">{meal.name}</h2>
+                  {meal.imageUrl && (
+                    <Image
+                      src={meal.imageUrl}
+                      alt={meal.name}
+                      width={500}
+                      height={200}
+                      className="w-full h-48 object-cover my-2"
+                    />
+                  )}
+                  <p>
+                    <strong>価格:</strong> {meal.price}円
+                  </p>
+                  <p>
+                    <strong>施設:</strong> {meal.facility.name}
+                  </p>
+                  <Link
+                    href={`/sauna-meals/${meal.id}`}
+                    className="text-blue-500 hover:underline"
+                  >
+                    詳細を見る
+                  </Link>
+                </div>
+              ))}
+              {!filterMeals.length && (
+                <div className="col-span-3 flex items-center justify-center mt-52">
+                  <p className="text-center">該当するサウナ飯はありません</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="absolute bottom-6 sm:bottom-30 md:bottom-30 lg:bottom-30 left-1/2 transform -translate-x-1/2 w-full sm:w-auto">
+          <PageNation
+            filterContent={filterMeals}
+            PerPage={mealsPerPage}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </div>
       </div>
     </div>
   );

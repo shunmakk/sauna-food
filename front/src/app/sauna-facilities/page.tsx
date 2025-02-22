@@ -53,14 +53,14 @@ export default function SaunaFacilityList() {
   ); //現在の表示施設
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   return (
-    <div className="flex flex-col min-h-[97vh] bg-gray-100 relative">
+    <div className="flex flex-col min-h-[calc(100vh-theme(space.16))] bg-gray-100">
       <Header />
-      <div className="container mx-auto p-4 mt-12">
+      <div className="container mx-auto p-4 mt-12 flex flex-col flex-grow relative">
         <h1 className="text-4xl font-bold mb-6">サウナ施設一覧</h1>
         {error && <p className="text-red-500 mt-4">{error}</p>}
-        <div className="flex  flex-col gap-6   md:flex-row   md:justify-between md:items-center">
+
+        <div className="flex flex-col gap-6 md:flex-row md:justify-between md:items-center">
           <Link
             href="/sauna-facilities/create"
             className="bg-green-500 text-white text-center p-2 rounded"
@@ -72,36 +72,40 @@ export default function SaunaFacilityList() {
             placeholder={"施設名、住所を検索"}
           />
         </div>
-        {loading ? (
-          <div className="col-span-3 flex items-center justify-center mt-52">
-            <p className="text-center">読み込み中...</p>
-          </div>
-        ) : (
-          <ul className="mt-8 space-y-2">
-            {currentFacilities.map((facility) => (
-              <li key={facility.id} className="border p-2 rounded">
-                <Link
-                  href={`/sauna-facilities/${facility.id}`}
-                  className="text-blue-500 hover:underline text-2xl"
-                >
-                  {facility.name}
-                </Link>
-                <div>{facility.address}</div>
-              </li>
-            ))}
-            {currentFacilities.length === 0 && !loading && (
-              <div className="col-span-3 flex items-center justify-center mt-52">
-                <p className="text-center">該当するサウナ施設はありません</p>
-              </div>
-            )}
-          </ul>
-        )}
-        <PageNation
-          filterContent={filterFacilities}
-          PerPage={facilitiesPerPage}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
+        <div className="flex-grow mb-24">
+          {loading ? (
+            <div className="flex items-center justify-center mt-52">
+              <p className="text-center">読み込み中...</p>
+            </div>
+          ) : (
+            <ul className="mt-8 space-y-2">
+              {currentFacilities.map((facility) => (
+                <li key={facility.id} className="border p-2 rounded">
+                  <Link
+                    href={`/sauna-facilities/${facility.id}`}
+                    className="text-blue-500 hover:underline text-2xl"
+                  >
+                    {facility.name}
+                  </Link>
+                  <div>{facility.address}</div>
+                </li>
+              ))}
+              {currentFacilities.length === 0 && !loading && (
+                <div className="flex items-center justify-center mt-52">
+                  <p className="text-center">該当するサウナ施設はありません</p>
+                </div>
+              )}
+            </ul>
+          )}
+        </div>
+        <div className="absolute bottom-6 sm:bottom-30 md:bottom-30 lg:bottom-30 left-1/2 transform -translate-x-1/2 w-full sm:w-auto">
+          <PageNation
+            filterContent={filterFacilities}
+            PerPage={facilitiesPerPage}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </div>
       </div>
     </div>
   );

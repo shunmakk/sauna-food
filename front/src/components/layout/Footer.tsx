@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="p-10 text-center text-xs">
         <ul className="flex flex-wrap items-center justify-center gap-5">
           <li className="hover:text-gray-400">
-            <Link href="/sauna-facilities">ホーム</Link>
+            <Link href="/">ホーム</Link>
           </li>
           <li className="hover:text-gray-400">
             <Link href="/sauna-facilities">サウナ施設一覧</Link>
