@@ -5,6 +5,7 @@ import LogoutButton from "../auth/LogoutButton";
 import LoginButton from "../auth/LoginButton";
 import RegisterButton from "../auth/RegisterButton";
 import { useAuth } from "../../../context/AuthContext";
+import { IoHomeSharp } from "react-icons/io5";
 
 const Header: React.FC = () => {
   const { user, loading } = useAuth();
@@ -14,7 +15,12 @@ const Header: React.FC = () => {
       <header className="bg-white shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center py-2 h-12">
           <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-300">
-            <Link href="/">サ飯レビュー</Link>
+            <Link href="/" className="flex items-center ">
+              <span className="invisible">サ飯レビュー</span>
+              <span className="text-3xl text-blue-500">
+                <IoHomeSharp />
+              </span>
+            </Link>
           </h1>
           <nav>
             <ul className="flex gap-4">

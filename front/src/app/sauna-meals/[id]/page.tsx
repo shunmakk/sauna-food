@@ -2,9 +2,10 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-// import { useAuth } from "../../../../context/AuthContext";
 import ReviewForm from "../../../components/reviews/ReviewForm";
 import Image from "next/image";
+import { Rating } from "@mui/material";
+import Link from "next/link";
 
 interface SaunaMeal {
   id: string;
@@ -69,12 +70,35 @@ export default function SaunaMealDetail({
         <ul>
           {saunaMeal?.reviews?.map((review) => (
             <li key={review.id} className="mb-4 p-4 border rounded">
-              <p>
-                <strong>{review.user.name}</strong>
+              <p className="flex items-center gap-4">
+                <strong className="text-lg">
+                  {review.user.name}さんのレビュー
+                </strong>
+                <Rating
+                  name="総合評価"
+                  value={review.overallRating}
+                  readOnly
+                  size="large"
+                />
               </p>
-              <p>総合評価: {review.overallRating}/5</p>
-              <p>味: {review.tasteRating}/5</p>
-              <p>価格: {review.valueRating}/5</p>
+              <p className="flex items-center gap-4">
+                <span>味:</span>
+                <Rating
+                  name="味の評価"
+                  value={review.tasteRating}
+                  readOnly
+                  size="small"
+                />
+              </p>
+              <p className="flex items-center">
+                <span>価格:</span>
+                <Rating
+                  name="価格の評価"
+                  value={review.valueRating}
+                  readOnly
+                  size="small"
+                />
+              </p>
               <p>{review.comment}</p>
             </li>
           ))}
@@ -93,13 +117,15 @@ export default function SaunaMealDetail({
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">{saunaMeal.name}</h1>
       {saunaMeal.imageUrl && (
-        <Image
-          src={saunaMeal.imageUrl}
-          alt={saunaMeal.name}
-          width={1000}
-          height={500}
-          className=" max-w-md mb-4"
-        />
+        <div className="relative w-full md:w-1/2 aspect-video mb-4">
+          <Image
+            src={saunaMeal.imageUrl}
+            alt={saunaMeal.name}
+            fill
+            sizes="(max-width: 768px) 60vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover rounded-lg cursor-pointer"
+          />
+        </div>
       )}
       <p className="mb-2">
         <strong>価格:</strong> {saunaMeal.price}円
@@ -108,7 +134,13 @@ export default function SaunaMealDetail({
         <strong>説明:</strong> {saunaMeal.description}
       </p>
       <p className="mb-4">
-        <strong>施設:</strong> {saunaMeal.facility.name}
+        <strong>施設:</strong>
+        <Link
+          href={`/sauna-facilities/${saunaMeal.facility.id}`}
+          className="text-blue-500 hover:underline"
+        >
+          {saunaMeal.facility.name}
+        </Link>
       </p>
       <button
         onClick={() => setShowReviewForm(!showMReviewForm)}
@@ -126,7 +158,9 @@ export default function SaunaMealDetail({
           onReviewAdded={handleReviewAdded}
         />
       )}
-      <h2 className="text-2xl font-bold mt-8 mb-4">レビュー</h2>
+      <h2 className="text-2xl font-bold mt-8 mb-4">
+        {saunaMeal.name}のレビュー一覧
+      </h2>
       {reviewList}
     </div>
   );
