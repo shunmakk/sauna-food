@@ -1,9 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import { authMiddleware } from "../middleware/auth";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../utlis/prisma";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 // プロフィールの取得
 router.get(

@@ -1,9 +1,8 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from ".prisma/client";
 import { authMiddleware } from "../middleware/auth";
+import prisma from "../utlis/prisma";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 //サウナ飯の登録
 router.post("/", authMiddleware, async (req: Request, res: Response) => {

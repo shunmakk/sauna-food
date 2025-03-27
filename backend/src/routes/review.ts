@@ -1,9 +1,8 @@
-import { PrismaClient } from ".prisma/client";
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
+import prisma from "../utlis/prisma";
 
 const router = express.Router();
-const prsima = new PrismaClient();
 
 //投稿
 router.post("/", authMiddleware, async (req: any, res: any) => {
@@ -20,7 +19,7 @@ router.post("/", authMiddleware, async (req: any, res: any) => {
     return res.status(400).json({ error: "必須フィールドが不足しています" });
   }
   try {
-    const createReview = await prsima.review.create({
+    const createReview = await prisma.review.create({
       data: {
         overallRating: Number(overallRating), //number型に強制変換
         tasteRating: Number(tasteRating),
@@ -40,7 +39,7 @@ router.post("/", authMiddleware, async (req: any, res: any) => {
 router.get("/saunaMeal/:saunaMealId", async (req: any, res: any) => {
   const { saunaMealId } = req.params;
   try {
-    const getSpecificMealsReview = await prsima.review.findMany({
+    const getSpecificMealsReview = await prisma.review.findMany({
       where: { saunaMealId },
       include: {
         user: true,
@@ -56,7 +55,7 @@ router.get("/saunaMeal/:saunaMealId", async (req: any, res: any) => {
 router.get("/:id", async (req: any, res: any) => {
   const { id } = req.params;
   try {
-    const getSpecificReview = await prsima.review.findUnique({
+    const getSpecificReview = await prisma.review.findUnique({
       where: { id },
       include: { user: true, saunaMeal: true },
     });

@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from ".prisma/client";
 import admin from "../config/firebaseAdmin"; // Firebase Admin SDK
 import { authMiddleware } from "../middleware/auth";
+import prisma from "../utlis/prisma";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 // ユーザー登録エンドポイント（IDトークンを使ったユーザー作成）
 router.post(
