@@ -5,10 +5,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../../context/AuthContext";
-import { Alert } from "@mui/material";
-import AlertTitle from "@mui/material/AlertTitle";
-import Snackbar from "@mui/material/Snackbar";
-import ClearIcon from "@mui/icons-material/Clear";
+import ErrorSnackbar from "@/components/common/ErrorSnackbar";
 
 interface SaunaFacilityForm {
   name: string;
@@ -127,28 +124,7 @@ export default function EditSaunaFacility({
         </form>
         {error && (
           // ここは他の画面でも共通化してもいいかも
-          <Snackbar
-            open={open}
-            onClose={(event) =>
-              handleClose(event as React.MouseEvent<HTMLDivElement>)
-            }
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          >
-            <Alert
-              severity="error"
-              action={
-                <div
-                  onClick={(event) => handleClose(event)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <ClearIcon />
-                </div>
-              }
-            >
-              <AlertTitle>Error</AlertTitle>
-              {error}
-            </Alert>
-          </Snackbar>
+          <ErrorSnackbar open={open} error={error} handleClose={handleClose} />
         )}
       </div>
     </>
